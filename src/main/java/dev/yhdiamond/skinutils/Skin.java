@@ -24,6 +24,10 @@ public class Skin {
         this.i = input;
     }
 
+    public static Skin fromBufferedImage(BufferedImage image) throws IncorrectlySizedSkinException {
+        return new Skin(image);
+    }
+
     public static Skin fromUsername(String username) throws IncorrectlySizedSkinException, IOException {
         return fromUUID(getUUIDFromUsername(username));
     }
