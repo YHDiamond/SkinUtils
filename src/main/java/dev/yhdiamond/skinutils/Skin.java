@@ -80,14 +80,4 @@ public class Skin {
         throw new IncorrectlySizedSkinException();
     }
 
-    public String uploadToMojang(String name) throws IOException {
-        URL url = new URL("https://api.mineskin.org/generate/upload");
-        URLConnection connection = url.openConnection();
-        connection.setRequestProperty("User-Agent", "SkinUtils/1.0");
-        return "";
-    }
-
-    public String uploadToMojang() throws IOException {
-        return uploadToMojang(null);
-    }
 }
