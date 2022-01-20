@@ -19,25 +19,29 @@ public class SkinUtils {
     }
 
     public static URL getSkinURLFromUUID(UUID uuid) throws IOException {
-        String requestURL = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid;
+        String requestURL = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replace("-", "");
         String response = makeGetRequest(requestURL);
         JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
         JsonArray properties = jsonResponse.getAsJsonArray("properties");
-        JsonObject finalObject = properties.get(1).getAsJsonObject();
-        String base64 = finalObject.get("name").getAsString();
+        JsonObject finalObject = properties.get(0).getAsJsonObject();
+        String base64 = finalObject.get("value").getAsString();
         String decodedBase64 = new String(Base64.getDecoder().decode(base64.getBytes()));
         JsonObject decodedJson = JsonParser.parseString(decodedBase64).getAsJsonObject();
         return new URL(decodedJson.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString());
     }
 
     public static URL getSkinURLFromUUID(String uuid) throws IOException {
-        return getSkinURLFromUUID(UUID.fromString(uuid));
+        return getSkinURLFromUUID(UUID.fromString(uuid.replaceFirst(
+                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+        )));
     }
 
     public static UUID getUUIDFromUsername(String username) throws IOException {
         String requestURL = "https://api.mojang.com/users/profiles/minecraft/" + username;
         String response = makeGetRequest(requestURL);
-        return UUID.fromString(JsonParser.parseString(response).getAsJsonObject().get("id").getAsString());
+        return UUID.fromString(JsonParser.parseString(response).getAsJsonObject().get("id").getAsString().replaceFirst(
+                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+        ));
     }
 
     private static String makeGetRequest(URL url) throws IOException {

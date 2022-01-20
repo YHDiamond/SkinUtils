@@ -17,7 +17,7 @@ import static dev.yhdiamond.skinutils.SkinUtils.getUUIDFromUsername;
 
 public class Skin {
 
-    private static BufferedImage i;
+    private BufferedImage i;
 
     private Skin(BufferedImage input) throws IncorrectlySizedSkinException {
         checkImageSize(input);
@@ -78,5 +78,16 @@ public class Skin {
     private static void checkImageSize(BufferedImage image) throws IncorrectlySizedSkinException {
         if (image.getWidth() == 64 && image.getHeight() == 64) return;
         throw new IncorrectlySizedSkinException();
+    }
+
+    public String uploadToMojang(String name) throws IOException {
+        URL url = new URL("https://api.mineskin.org/generate/upload");
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("User-Agent", "SkinUtils/1.0");
+        return "";
+    }
+
+    public String uploadToMojang() throws IOException {
+        return uploadToMojang(null);
     }
 }
